@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "feedback-vvpk"
+version = "0.1.0"
+description = ""
+authors = ["Matsu016 <maks.tcyrbanov102599@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiogram = "^3.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
