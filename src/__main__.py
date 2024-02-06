@@ -18,10 +18,10 @@ def start_all_kb() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
 
     keyboard = [
-        "Додати відгук",
-        "Переглянути відгук",
-        "Про бота",
-        "Статистика",
+        "📝 Додати відгук 📒",
+        "😱 Переглянути відгук 😱",
+        "📋 Про бота 📋",
+        "📈 Статистика 📉",
     ]
 
     for button in keyboard:
@@ -29,14 +29,15 @@ def start_all_kb() -> ReplyKeyboardMarkup:
 
     return builder.adjust(2).as_markup(resize_keyboard=True)
 
+
 def feedback_choise() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
 
     keyboard = [
-        "Викладачі",
-        "Предмети",
-        "Назад",
-        "Коледж",
+        "👨‍🏫 Викладачі 👩‍🏫",
+        "📚 Предмети 📚",
+        "⬅️ Назад ↩️",
+        "🏫 Коледж 🔔",
     ]
 
     for button in keyboard:
@@ -79,48 +80,63 @@ def dryga_keyboard() -> InlineKeyboardMarkup:
     return builder.adjust(2).as_markup(resize_keyboard=True)
 
 
-@dp.message(F.text == "Предмети")
+def trety_keyboard() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    keyboard = [
+        "Пропозиції",
+        "Скарги",
+    ]
+
+    for button in keyboard:
+        builder.add(InlineKeyboardButton(text=button, callback_data=button))
+
+    return builder.adjust(2).as_markup(resize_keyboard=True)
+
+
+@dp.message(F.text == "🏫 Коледж 🔔")
+async def cmd_start(message: types.Message):
+    await message.answer(text="Виберіть варіант:", reply_markup=trety_keyboard())
+
+
+@dp.message(F.text == "📚 Предмети 📚")
 async def cmd_start(message: types.Message):
     await message.answer(text="Виберіть предмет:", reply_markup=dryga_keyboard())
 
-@dp.message(F.text == "Додати відгук")
+
+@dp.message(F.text == "📝 Додати відгук 📒")
 async def cmd_start(message: types.Message):
     await message.answer(text="Куди ви хочете додати?", reply_markup=feedback_choise())
 
 
-@dp.message(F.text == "Переглянути відгук")
+@dp.message(F.text == "😱 Переглянути відгук 😱")
 async def cmd_start(message: types.Message):
     await message.answer(text="Куди ви хочете додати?", reply_markup=feedback_choise())
 
 
-@dp.message(F.text == "Викладачі")
+@dp.message(F.text == "👨‍🏫 Викладачі 👩‍🏫")
 async def cmd_start(message: types.Message):
     await message.answer(text="Виберіть викладача", reply_markup=teacher())
 
 
-@dp.message(F.text == "Про бота")
+@dp.message(F.text == "📋 Про бота 📋")
 async def cmd_start(message: types.Message):
     await message.answer(text="Інформаці про бота:")
 
 
-@dp.message(F.text == "Статистика")
+@dp.message(F.text == "📈 Статистика 📉")
 async def cmd_start(message: types.Message):
     await message.answer(text="Статистика:")
 
 
-@dp.message(F.text == "Назад")
+@dp.message(F.text == "⬅️ Назад ↩️")
 async def cmd_start(message: types.Message):
     await message.answer(text="Головне меню:", reply_markup=start_all_kb())
 
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
-    await message.answer(text="Hello!!!!!!", reply_markup=start_all_kb())
-
-
-@dp.message()
-async def cmd_start(message: types.Message):
-    await message.answer(text="Hello!!!!!!", reply_markup=start_all_kb())
+    await message.answer(text="Доброго дня!", reply_markup=start_all_kb())
 
 
 async def main():
