@@ -21,4 +21,15 @@ async def cmd_start(message: types.Message):
 
 @router.message(F.text == "📈 Статистика 📉")
 async def cmd_start(message: types.Message):
-    await message.answer(text="Статистика:")
+    caption = (
+        "<b>Cтатистика</b> 📊:\n",
+        f"  • Користувачів 👥: {0}\n",
+        f"  • Відгуків 📝: {0}\n",
+        f"     ╰ Викладачів 👨‍🏫: {0}\n",
+        f"     ╰ Предметів 📕: {0}\n",
+        f"     ╰ Коледджу 🏫: {0}\n",
+        f"  • Прийнятих відгуків ✅: {0}\n",
+        f"  • Відхилених відгуків 🚫: {0}\n",
+    )
+
+    await message.answer(text="".join(caption), parse_mode="HTML")
