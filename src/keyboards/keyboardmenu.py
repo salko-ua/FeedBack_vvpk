@@ -46,7 +46,9 @@ def teacher() -> InlineKeyboardMarkup:
         "Руслан Цаль-Цалько",
         "Андрій Назаров",
         "Богдан Ващук",
-        "Відмінити❌",
+        "Назад <-",
+        "Далі ->",
+        "Сховати ❌",
     ]
 
     for button in keyboard:
@@ -64,6 +66,9 @@ def dryga_keyboard() -> InlineKeyboardMarkup:
         "Історія",
         "Математика",
         "Фізика",
+        "Назад <-",
+        "Далі->",
+        "Сховати ❌",
     ]
 
     for button in keyboard:
@@ -78,6 +83,7 @@ def trety_keyboard() -> InlineKeyboardMarkup:
     keyboard = [
         "Пропозиції",
         "Скарги",
+        "Сховати ❌",
     ]
 
     for button in keyboard:

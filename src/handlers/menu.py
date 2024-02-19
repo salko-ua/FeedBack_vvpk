@@ -19,6 +19,11 @@ async def cmd_start(message: types.Message):
     await message.answer(text="Інформаці про бота:")
 
 
+@router.callback_query(F.data == "Сховати ❌")
+async def sxovatu(query: types.CallbackQuery):
+    await query.message.delete()
+
+
 @router.message(F.text == "📈 Статистика 📉")
 async def cmd_start(message: types.Message):
     caption = (

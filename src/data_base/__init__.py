@@ -43,6 +43,14 @@ class Database(AddDB, ExistDB):
             )
             """
         )
+        await base.execute(
+            """
+            CREATE TABLE IF NOT EXISTS names(
+                types             TEXT,             -- на вибір предмет або вчитель (int)
+                name              TEXT              -- на вибір ім'я предмет чи вчитель (college, teacher, subject)
+            )
+            """
+        )
 
         await base.commit()
         return cls(base, cur)
