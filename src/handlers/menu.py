@@ -1,5 +1,6 @@
 from aiogram import types, Router, F
 from src.keyboards import feedback_choise
+from src.data_base import Database
 
 router = Router()
 
@@ -26,9 +27,11 @@ async def sxovatu(query: types.CallbackQuery):
 
 @router.message(F.text == "📈 Статистика 📉")
 async def cmd_start(message: types.Message):
+    db = await Database.setup()
+
     caption = (
         "<b>Cтатистика</b> 📊:\n",
-        f"  • Користувачів 👥: {0}\n",
+        f"  • Користувачів 👥: {await db.count_users()}\n",
         f"  • Відгуків 📝: {0}\n",
         f"     ╰ Викладачів 👨‍🏫: {0}\n",
         f"     ╰ Предметів 📕: {0}\n",
