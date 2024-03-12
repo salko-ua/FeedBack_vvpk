@@ -1,11 +1,13 @@
 from aiogram import types, Router, F
+
 from src.keyboards import feedback_choise
+from src.data_base import Database
 
 router = Router()
 
 
 @router.message(F.text == "📝 Додати відгук 📒")
-async def cmd_start(message: types.Message):
+async def add_feedback(message: types.Message):
     await message.answer(text="Куди ви хочете додати?", reply_markup=feedback_choise())
 
 
@@ -26,9 +28,11 @@ async def sxovatu(query: types.CallbackQuery):
 
 @router.message(F.text == "📈 Статистика 📉")
 async def cmd_start(message: types.Message):
+    db = await Database.setup()
+
     caption = (
         "<b>Cтатистика</b> 📊:\n",
-        f"  • Користувачів 👥: {0}\n",
+        f"  • Користувачів 👥: {await db.count_users()}\n",
         f"  • Відгуків 📝: {0}\n",
         f"     ╰ Викладачів 👨‍🏫: {0}\n",
         f"     ╰ Предметів 📕: {0}\n",
