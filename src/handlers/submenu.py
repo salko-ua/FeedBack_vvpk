@@ -2,7 +2,7 @@ from aiogram import types, Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from src.keyboards import menu, trety_keyboard, dryga_keyboard, teacher
+from src.keyboards import menu, dryga_keyboard, teacher
 from src.data_base import Database
 
 router = Router()
@@ -15,7 +15,7 @@ class FSMFeedBack(StatesGroup):
 
 @router.message(F.text == "🏫 Коледж 🔔")
 async def cmd_start(message: types.Message, state: FSMContext):
-    await message.answer(text="Виберіть варіант:", reply_markup=trety_keyboard())
+    await message.answer(text="Напишіть відгук:")
     await state.update_data(selection="collage")
     await state.update_data(selection_name=None)
     await state.set_state(FSMFeedBack.write_feedback)
@@ -39,8 +39,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
 
 @router.callback_query(FSMFeedBack.chose_name_selection)
 async def add_feedback1(query: types.CallbackQuery, state: FSMContext):
-    teacher_name = query.data[8:]
-    print(teacher_name)
+    await query.message.delete()
     await state.update_data(selection_name=query.data)
     await query.message.answer(f"Напишіть відгук: ")
     await state.set_state(FSMFeedBack.write_feedback)
@@ -50,6 +49,7 @@ async def add_feedback1(query: types.CallbackQuery, state: FSMContext):
 async def add_feedback2(message: types.Message, state: FSMContext):
     db = await Database.setup()
     data = await state.get_data()
+    await state.clear()
 
     await db.add_feedback(
         user_id=message.from_user.id,
@@ -59,6 +59,8 @@ async def add_feedback2(message: types.Message, state: FSMContext):
         data_sending=10000,
         stars="⭐⭐⭐⭐⭐",
     )
+
+    await message.answer(text=f"Ваш відгук про {data["selection"]} прийнято", reply_markup=menu())
 
 
 @router.message(F.text == "⬅️ Назад ↩️")

@@ -12,7 +12,7 @@ async def register_handlers(dp: Dispatcher) -> None:
 
 
 async def start_bot() -> None:
-    bot = Bot(token=TOKEN, parse_mode="HTML")
+    bot = Bot(token=TOKEN)
     dispatcher = Dispatcher()
 
     await register_handlers(dispatcher)
