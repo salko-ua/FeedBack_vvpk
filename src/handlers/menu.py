@@ -1,7 +1,7 @@
 from aiogram import types, Router, F
 from aiogram.fsm.context import FSMContext
 
-from src.keyboards import feedback_choise
+from src.keyboards import feedback_choose
 from src.data_base import Database
 
 router = Router()
@@ -10,7 +10,7 @@ router = Router()
 @router.message(F.text == "📝 Додати відгук 📒")
 async def add_feedback(message: types.Message):
     await message.answer(
-        text="Куди ви хочете додати?", reply_markup=feedback_choise()
+        text="Куди ви хочете додати?", reply_markup=feedback_choose()
     )
 
 

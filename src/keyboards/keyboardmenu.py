@@ -23,7 +23,7 @@ def menu() -> ReplyKeyboardMarkup:
     return builder.adjust(2).as_markup(resize_keyboard=True)
 
 
-def feedback_choise() -> ReplyKeyboardMarkup:
+def feedback_choose() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
 
     keyboard = [
@@ -68,21 +68,6 @@ def dryga_keyboard() -> InlineKeyboardMarkup:
         "Фізика",
         "Назад <-",
         "Далі->",
-        "Сховати ❌",
-    ]
-
-    for button in keyboard:
-        builder.add(InlineKeyboardButton(text=button, callback_data=button))
-
-    return builder.adjust(2).as_markup(resize_keyboard=True)
-
-
-def trety_keyboard() -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-
-    keyboard = [
-        "Пропозиції",
-        "Скарги",
         "Сховати ❌",
     ]
 
