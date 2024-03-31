@@ -9,3 +9,8 @@ In the bot, you can write a review for the teacher, the subject, or about the co
 - aiosqlite (for async database)
 - and other smaller libraries were used
 
+### TODO:
+1. Користувач може переглядати відгуки
+2. Користувач може додавати відгуки
+3. Адмін повинен перевіряти і приймати або не приймати відгуки
+4. Відповідь на команду /start
