@@ -138,3 +138,14 @@ async def get_feedback_by_selection(
     )
 
     return builder.adjust(*sizes).as_markup(resize_keyboard=True)
+
+
+async def back_by_selection(selection: str) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+
+    builder.add(InlineKeyboardButton(text="⬅️ Назад", callback_data=selection))
+    builder.add(
+        InlineKeyboardButton(text="Сховати ❌", callback_data="Сховати ❌")
+    )
+
+    return builder.adjust().as_markup(resize_keyboard=True)

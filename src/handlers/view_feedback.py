@@ -1,7 +1,10 @@
+import time
+
 from aiogram import types, Router, F
 from src.keyboards import (
     feedback_review_choose,
     get_feedback_by_selection,
+    back_by_selection,
     menu,
 )
 from src.data_base import Database
@@ -58,7 +61,24 @@ async def see_feedback(query: types.CallbackQuery):
     db = await Database.setup()
     feedback_id = query.data.split()[2]
     feedback = await db.get_feedback(feedback_id)
-    await query.message.answer(
-        text=f"Відгук від {feedback[1]}:\n\n{feedback[2]}"
+    print(feedback)
+    # not write plis who write feedback it is confidential information
+    selection = (
+            ('коледж' if feedback[2] == 'college' else '') +
+            ('предмет' if feedback[2] == 'subject' else '') +
+            ('викладача' if feedback[2] == 'teacher' else '')
     )
+    selection_name = (
+            (f"- \'{feedback[3]}\'" if feedback[2] == 'subject' else '') +
+            (f"- \'{feedback[3]}\'" if feedback[2] == 'teacher' else '') +
+            ('' if feedback[2] == 'college' else '')
+    )
+    text = (
+        f"➡️ Відгук про {selection} {selection_name}\n"
+        f"📝 Відгук: {feedback[4]}\n"
+        f"⭐️ Оцінка: {feedback[6]}\n"
+        f"🕙 Створено користувачем - {time.strftime("%H:%M %D", time.localtime(feedback[5]))}"
+
+    )
+    await query.message.edit_text(text=text, reply_markup=await back_by_selection(feedback[2]))
     await query.answer()
