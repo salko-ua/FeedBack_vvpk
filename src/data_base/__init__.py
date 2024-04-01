@@ -5,9 +5,10 @@ import aiosqlite
 from src.data_base.exists import ExistDB
 from src.data_base.select import SelectDB
 from src.data_base.adds import AddDB
+from src.data_base.update import UpdateDB
 
 
-class Database(AddDB, ExistDB, SelectDB):
+class Database(AddDB, ExistDB, SelectDB, UpdateDB):
     @classmethod
     @asyncache.cached({})
     async def setup(cls):
@@ -34,12 +35,14 @@ class Database(AddDB, ExistDB, SelectDB):
         await base.execute(
             """
             CREATE TABLE IF NOT EXISTS feedback(
+                feedback_id       TEXT,             -- ід відгуку (TEXT)
                 user_id           INTEGER NOT NULL, -- ід користувача (int)
                 selection         TEXT,             -- на вибір (college, teacher, subject)
                 selection_object  TEXT,             -- на вибір (None, name_teacher, name_suject)
                 feedback          TEXT,             -- відгук (str)
                 data_sending      INTEGER,          -- дата написання відгуку
-                stars             TEXT              -- оцінка
+                stars             TEXT,             -- оцінка
+                status            INTEGER           -- статус відгуку (0, 1, 2) 0 - на перевірці, 1 - прийнято, 2 - відхилено
             )
             """
         )

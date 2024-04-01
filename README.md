@@ -9,8 +9,8 @@ In the bot, you can write a review for the teacher, the subject, or about the co
 - aiosqlite (for async database)
 - and other smaller libraries were used
 
-<<<<<<< HEAD
-### This project was created as a course work
-=======
-### This project was created as a course work
->>>>>>> 499255d9f4bce185aa5063f81cdfb586e5ac9324
+### TODO:
+1. Користувач може переглядати відгуки 
+2. Користувач може додавати відгуки +
+3. Адмін повинен перевіряти і приймати або не приймати відгуки +
+4. Відповідь на команду /start +
