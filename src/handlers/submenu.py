@@ -20,7 +20,7 @@ class FSMFeedBack(StatesGroup):
 @router.message(F.text == "🏫 Коледж 🔔")
 async def cmd_start(message: types.Message, state: FSMContext):
     await message.answer(text="Напишіть відгук:")
-    await state.update_data(selection="collage")
+    await state.update_data(selection="college")
     await state.update_data(selection_name=None)
     await state.set_state(FSMFeedBack.write_feedback)
 
@@ -133,3 +133,5 @@ async def accept_or_reject_feedback(query: types.CallbackQuery):
 @router.message(F.text == "⬅️ Назад ↩️")
 async def cmd_start(message: types.Message):
     await message.answer(text="Головне меню:", reply_markup=menu())
+
+

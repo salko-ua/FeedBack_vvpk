@@ -59,7 +59,18 @@ class SelectDB(BaseDBPart):
 
     async def get_feedback(self, feedback_id: str):
         result = await self.cur.execute(
-            "SELECT * FROM feedback WHERE feedback_id = ?", (feedback_id,)
+            "SELECT * FROM feedback WHERE feedback_id = ?",
+            (feedback_id,),
         )
         result = await result.fetchone()
+        return result
+
+    async def get_feedback_by_selection(self, selection: str, count: int):
+        offset = (count - 1) * 5
+
+        result = await self.cur.execute(
+            "SELECT feedback_id, feedback FROM feedback WHERE selection = ? LIMIT 5 OFFSET ?",
+            (selection, offset),
+        )
+        result = await result.fetchall()
         return result
