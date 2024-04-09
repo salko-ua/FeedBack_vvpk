@@ -69,8 +69,26 @@ class SelectDB(BaseDBPart):
         offset = (count - 1) * 5
 
         result = await self.cur.execute(
-            "SELECT feedback_id, feedback FROM feedback WHERE selection = ? LIMIT 5 OFFSET ?",
+            "SELECT feedback_id, feedback FROM feedback WHERE status = 1 AND selection = ? LIMIT 5 OFFSET ?",
             (selection, offset),
         )
         result = await result.fetchall()
         return result
+
+    async def get_all_names_by_type(self, types: str, count: int):
+        offset = (count - 1) * 5
+
+        if types == "teacher":
+            result = await self.cur.execute(
+                "SELECT name FROM names WHERE types = ? LIMIT 5 OFFSET ?",
+                ("teacher", offset),
+            )
+            result = await result.fetchall()
+            return result
+        elif types == "subject":
+            result = await self.cur.execute(
+                "SELECT name FROM names WHERE types = ? LIMIT 5 OFFSET ?",
+                ("subject", offset),
+            )
+            result = await result.fetchall()
+            return result

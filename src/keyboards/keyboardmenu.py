@@ -4,6 +4,7 @@ from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
 )
+from typing import Literal
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from src.data_base import Database
 
@@ -61,42 +62,42 @@ def feedback_review_choose() -> InlineKeyboardMarkup:
     return builder.adjust(2).as_markup(resize_keyboard=True)
 
 
-def teacher() -> InlineKeyboardMarkup:
+async def get_keyboard_by_type(
+    types: Literal["subject", "teacher"],
+    page: int,
+) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
-    keyboard = [
-        "Руслан Цаль-Цалько",
-        "Андрій Назаров",
-        "Богдан Ващук",
-        "Назад <-",
-        "Далі ->",
-        "Сховати ❌",
-    ]
+    db = await Database.setup()
+    all_names_by_type = await db.get_all_names_by_type(types, page)
+    print(all_names_by_type)
+    next_names_by_type = await db.get_all_names_by_type(types, page + 1)
+    print(next_names_by_type)
+    sizes = [1] * len(all_names_by_type) + [2] + [1]
 
-    for button in keyboard:
-        builder.add(InlineKeyboardButton(text=button, callback_data=button))
+    for button in all_names_by_type:
+        builder.add(
+            InlineKeyboardButton(text=button[0], callback_data=button[0])
+        )
 
-    return builder.adjust(2).as_markup(resize_keyboard=True)
+    if page != 1:
+        builder.add(
+            InlineKeyboardButton(
+                text="⬅️ Назад", callback_data="⬅️ Назад 1 " + types
+            )
+        )
+    if len(next_names_by_type) > 0:
+        builder.add(
+            InlineKeyboardButton(
+                text="Вперед ➡️", callback_data="Вперед ➡️ 1 " + types
+            )
+        )
 
+    builder.add(
+        InlineKeyboardButton(text="Сховати ❌", callback_data="Сховати ❌")
+    )
 
-def dryga_keyboard() -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-
-    keyboard = [
-        "Педагогіка",
-        "Архітектура",
-        "Історія",
-        "Математика",
-        "Фізика",
-        "Назад <-",
-        "Далі->",
-        "Сховати ❌",
-    ]
-
-    for button in keyboard:
-        builder.add(InlineKeyboardButton(text=button, callback_data=button))
-
-    return builder.adjust(2).as_markup(resize_keyboard=True)
+    return builder.adjust(*sizes).as_markup(resize_keyboard=True)
 
 
 async def get_feedback_by_selection(
@@ -106,14 +107,11 @@ async def get_feedback_by_selection(
 
     db = await Database.setup()
     all_feedback = await db.get_feedback_by_selection(selection, count)
-    print(all_feedback)
     next_feedback = await db.get_feedback_by_selection(selection, count + 1)
-    print(next_feedback)
     sizes = [1] * len(all_feedback) + [2] + [1]
-    print(sizes)
 
     for button in all_feedback:
-        button_text = f"{button[1][:10]}..."
+        button_text = f"{button[1].split('\n', 1)[0]}"
         builder.add(
             InlineKeyboardButton(
                 text=button_text, callback_data="SEE FEEDBACK " + button[0]
