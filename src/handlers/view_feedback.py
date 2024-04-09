@@ -76,7 +76,7 @@ async def see_feedback(query: types.CallbackQuery):
     text = (
         f"➡️ Відгук про {selection} {selection_name}\n"
         f"📝 Відгук: {feedback[4]}\n"
-        f"⭐️ Оцінка: {feedback[6]}\n"
+        #f"⭐️ Оцінка: {feedback[6]}\n"
         f"🕙 Створено користувачем - {time.strftime("%H:%M %D", time.localtime(feedback[5]))}"
 
     )

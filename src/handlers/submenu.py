@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from random import choice
 
-from src.keyboards import menu, dryga_keyboard, teacher
+from src.keyboards import menu, get_keyboard_by_type
 from src.data_base import Database
 from src.keyboards import accept_reject_feedback
 
@@ -15,6 +15,12 @@ router = Router()
 class FSMFeedBack(StatesGroup):
     chose_name_selection = State()
     write_feedback = State()
+
+
+@router.callback_query(F.data == "Сховати ❌")
+async def hide(query: types.CallbackQuery, state: FSMContext):
+    await query.message.delete()
+    await state.clear()
 
 
 @router.message(F.text == "🏫 Коледж 🔔")
@@ -28,7 +34,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
 @router.message(F.text == "📚 Предмети 📚")
 async def cmd_start(message: types.Message, state: FSMContext):
     await message.answer(
-        text="Виберіть предмет:", reply_markup=dryga_keyboard()
+        text=f"{1} Сторінка предметів:", reply_markup=await get_keyboard_by_type("subject", 1)
     )
     await state.update_data(selection_name=message.text)
     await state.update_data(selection="subject")
@@ -37,10 +43,25 @@ async def cmd_start(message: types.Message, state: FSMContext):
 
 @router.message(F.text == "👨‍🏫 Викладачі 👩‍🏫")
 async def cmd_start(message: types.Message, state: FSMContext):
-    await message.answer(text="Виберіть викладача", reply_markup=teacher())
+    await message.answer(text=f"{1} Сторінка викладачів:", reply_markup=await get_keyboard_by_type("teacher", 1))
     await state.update_data(selection_name=message.text)
     await state.update_data(selection="teacher")
     await state.set_state(FSMFeedBack.chose_name_selection)
+
+
+@router.callback_query(F.data.startswith("⬅️ Назад 1"), FSMFeedBack.chose_name_selection)
+@router.callback_query(F.data.startswith("Вперед ➡️ 1"), FSMFeedBack.chose_name_selection)
+async def feedback_review(query: types.CallbackQuery):
+    page = int(query.message.text.split()[0])
+
+    types = query.data.split()[3]
+    print(types)
+    page = page + 1 if query.data.startswith("Вперед ➡️") else page - 1
+    await query.message.edit_text(
+        text=f"{page} Сторінка {"викладачів" if types == "teacher" else "предметів"}:",
+        reply_markup=await get_keyboard_by_type(types, page),
+    )
+    await query.answer()
 
 
 @router.callback_query(FSMFeedBack.chose_name_selection)
@@ -87,7 +108,7 @@ async def add_feedback2(message: types.Message, state: FSMContext):
         f"  ╰ {'І\'мя/Назва:' + data['selection_name'] + '\n' if data["selection_name"] is not None else ''}"
         f"📊 Відгук: {message.text}\n"
         f"🕙 Дата надсилання: {time.strftime("%D %H:%M", time.localtime(date))}\n"
-        f"⭐️ Оцінка: ⭐⭐⭐⭐⭐\n"
+        #f"⭐️ Оцінка: ⭐⭐⭐⭐⭐\n"
         f"🧑🏿‍💻 Статус: Очікує на перевірку 🟡\n"
     )
 
@@ -118,7 +139,7 @@ async def accept_or_reject_feedback(query: types.CallbackQuery):
         f"  ╰ {feedback[3] + '\n' if feedback[3] is not None else ''}"
         f"📊 Відгук: {feedback[4]}\n"
         f"🕙 Дата надсилання: {time.strftime("%D %H:%M", time.localtime(feedback[5]))}\n"
-        f"⭐️ Оцінка: {feedback[6]}\n"
+        #f"⭐️ Оцінка: {feedback[6]}\n"
         f"🧑🏿‍💻 Статус: {'Прийнято ✅' if chose == 'Прийняти ✅' else 'Відхилено 🚫'}\n"
     )
 
@@ -133,5 +154,3 @@ async def accept_or_reject_feedback(query: types.CallbackQuery):
 @router.message(F.text == "⬅️ Назад ↩️")
 async def cmd_start(message: types.Message):
     await message.answer(text="Головне меню:", reply_markup=menu())
-
-

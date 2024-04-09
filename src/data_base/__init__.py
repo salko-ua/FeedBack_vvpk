@@ -49,8 +49,8 @@ class Database(AddDB, ExistDB, SelectDB, UpdateDB):
         await base.execute(
             """
             CREATE TABLE IF NOT EXISTS names(
-                types             TEXT,             -- на вибір предмет або вчитель (int)
-                name              TEXT              -- на вибір ім'я предмет чи вчитель (college, teacher, subject)
+                types             TEXT,             -- на вибір предмет або вчитель (teacher, subject)
+                name              TEXT              -- на вибір ім'я предмет чи вчитель (name_teacher, name_subject)
             )
             """
         )

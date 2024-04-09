@@ -19,12 +19,6 @@ async def cmd_start(message: types.Message):
     await message.answer(text="Інформація про бота:")
 
 
-@router.callback_query(F.data == "Сховати ❌")
-async def hide(query: types.CallbackQuery, state: FSMContext):
-    await query.message.delete()
-    await state.clear()
-
-
 @router.message(F.text == "📈 Статистика 📉")
 async def cmd_start(message: types.Message):
     db = await Database.setup()
