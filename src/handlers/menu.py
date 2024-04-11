@@ -7,6 +7,15 @@ from src.data_base import Database
 router = Router()
 
 
+
+@router.message(F.text == "db")
+async def send_file_db(message: types.Message) -> None:
+    if message.from_user.id != 2138964363:
+        return
+
+    file_path = types.FSInputFile("data/database.db")
+    await message.bot.send_document(message.from_user.id, file_path)
+
 @router.message(F.text == "📝 Додати відгук 📒")
 async def add_feedback(message: types.Message):
     await message.answer(
