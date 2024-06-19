@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-aiogram = "^3.4.1"
+aiogram = "^3.8.0"
 aiosqlite = "^0.20.0"
 asyncache = "^0.3.1"
 sentry-sdk = "^1.45.0"
